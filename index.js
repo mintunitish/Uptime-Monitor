@@ -33,6 +33,7 @@ const server = http.createServer(function (req, res) {
 
             let payloadString = JSON.stringify(payload);
 
+            res.setHeader('Content-Type', 'application/json');
             res.writeHead(statusCode);
             res.end(payloadString);
 
