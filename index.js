@@ -4,6 +4,8 @@ const url = require('url');
 const stringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
 const fs = require('fs');
+const handlers = require('./lib/handlers');
+const helpers = require('./lib/helpers');
 
 const httpServer = http.createServer((req, res) => {
     unifiedServer(req, res);
@@ -14,11 +16,12 @@ httpServer.listen(config.httpPort, function () {
 });
 
 const httpsServerOptions = {
-    'key' : fs.readFileSync('./https/key.pem'),
-    'cert' : fs.readFileSync('./https/cert.pem')
+    'key': fs.readFileSync('./https/key.pem'),
+    'cert': fs.readFileSync('./https/cert.pem')
 };
 
-const httpsServer = https.createServer(httpsServerOptions, (req, res) => {});
+const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
+});
 
 httpsServer.listen(config.httpsPort, function () {
     console.log(`Listening on port ${config.httpsPort}`);
@@ -27,7 +30,7 @@ httpsServer.listen(config.httpsPort, function () {
 let unifiedServer = (req, res) => {
     let parsedUrl = url.parse(req.url, true);
     let path = parsedUrl.pathname;
-    let trimmedPath = path.replace(/^\/+|\/+$/g,'');
+    let trimmedPath = path.replace(/^\/+|\/+$/g, '');
     let method = req.method.toLowerCase();
     let queryStringObject = parsedUrl.query;
     let headersObject = req.headers;
@@ -41,38 +44,27 @@ let unifiedServer = (req, res) => {
         buffer += decoder.end();
         let chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
         let data = {
-            'trimmedPath' : trimmedPath,
-            'queryStringObject' : queryStringObject,
-            'method' : method,
-            'headers' : headersObject,
-            'payload' : buffer
+            'trimmedPath': trimmedPath,
+            'queryStringObject': queryStringObject,
+            'method': method,
+            'headers': headersObject,
+            'payload': helpers.parseJsonToObject(buffer)
         };
 
         chosenHandler(data, (statusCode, payload) => {
             statusCode = typeof(statusCode) == "number" ? statusCode : 200;
             payload = typeof(payload) == 'object' ? payload : {};
-
-            let payloadString = JSON.stringify(payload);
-
             res.setHeader('Content-Type', 'application/json');
+            let payloadString = JSON.stringify(payload);
             res.writeHead(statusCode);
             res.end(payloadString);
-
-            console.log(buffer);
         });
+
+        console.log(buffer);
     });
 };
 
-const handlers = {};
-
-handlers.ping = (data, callback) => {
-    callback(200);
-};
-
-handlers.notFound = (data, callback) => {
-    callback(404);
-};
-
 const router = {
-    'ping' : handlers.ping
+    'ping': handlers.ping,
+    'users': handlers.users
 };
