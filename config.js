@@ -9,7 +9,12 @@ environments.staging = {
     'httpsPort' : 3001,
     'envName' : 'staging',
     'secret' : 'thisIsASecret',
-    'maxChecks' : 5
+    'maxChecks' : 5,
+    'twilio' : {
+        'accountSid' : '',
+        'authToken' : '',
+        'fromPhone' : ''
+    }
 };
 
 environments.production = {
@@ -17,7 +22,12 @@ environments.production = {
     'httpsPort' : 5001,
     'envName' : 'production',
     'secret' : 'someSecret',
-    'maxChecks' : 10
+    'maxChecks' : 10,
+    'twilio' : {
+        'accountSid' : '',
+        'authToken' : '',
+        'fromPhone' : ''
+    }
 };
 
 const currentEnvironment = typeof(process.env.NODE_ENV) == 'string' ? process.env.NODE_ENV.toLowerCase() : '';
