@@ -14,6 +14,12 @@ environments.staging = {
         'accountSid' : '',
         'authToken' : '',
         'fromPhone' : ''
+    },
+    'templateGlobals' : {
+        'appName' : 'Uptime Monitor',
+        'companyName' : 'Awesome People Inc.',
+        'yearCreated' : '2018',
+        'baseUrl' : 'http://localhost:3000/'
     }
 };
 
@@ -27,6 +33,12 @@ environments.production = {
         'accountSid' : '',
         'authToken' : '',
         'fromPhone' : ''
+    },
+    'templateGlobals' : {
+        'appName' : 'Uptime Monitor',
+        'companyName' : 'Awesome People Inc.',
+        'yearCreated' : '2018',
+        'baseUrl' : 'http://localhost:5000/'
     }
 };
 
