@@ -1,3 +1,9 @@
+/*
+ * Frontend Logic for application
+ *
+ */
+
+// Container for frontend application
 var app = {};
 
 // Config
@@ -489,10 +495,10 @@ app.loadChecksEditPage = function(){
                 document.querySelector("#checksEdit1 .protocolInput").value = responsePayload.protocol;
                 document.querySelector("#checksEdit1 .urlInput").value = responsePayload.url;
                 document.querySelector("#checksEdit1 .methodInput").value = responsePayload.method;
-                document.querySelector("#checksEdit1 .timeoutInput").value = responsePayload.timeoutSeconds;
+                document.querySelector("#checksEdit1 .timeoutInput").value = responsePayload.timeOutSec;
                 var successCodeCheckboxes = document.querySelectorAll("#checksEdit1 input.successCodesInput");
                 for(var i = 0; i < successCodeCheckboxes.length; i++){
-                    if(responsePayload.successCodes.indexOf(parseInt(successCodeCheckboxes[i].value)) > -1){
+                    if(responsePayload.statusCode.indexOf(parseInt(successCodeCheckboxes[i].value)) > -1){
                         successCodeCheckboxes[i].checked = true;
                     }
                 }
