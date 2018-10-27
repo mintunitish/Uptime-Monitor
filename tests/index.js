@@ -1,10 +1,20 @@
-const assert = require('assert');
+/*
+ * This file is part of the mintunitish/Uptime Monitor.
+ *
+ * Copyright (c) 2018, Nitish Kumar <mintu.nitish@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ *
+ * Created By: Nitish Kumar on 10/27/2018 11:28 PM
+ */
 
 _app = {};
 
-_app.tests = {
-    'unit' : {}
-};
+_app.tests = {};
+
+_app.tests.unit = require('./unit');
 
 _app.countTests = () => {
     let counter = 0;
@@ -24,7 +34,7 @@ _app.countTests = () => {
 
 _app.runTests = () => {
     let error = [];
-    let success = [];
+    let success = 0;
     const limit = _app.countTests();
     let counter = 0;
     for (let key in _app.tests){
@@ -32,25 +42,29 @@ _app.runTests = () => {
             const subTests = _app.tests[key];
             for (let testName in subTests) {
                 if (subTests.hasOwnProperty(testName)) {
-                    (function(){
-                        const tmpTestName = testName;
+                    (() => {
+                        let tmpTestName = testName;
                         let testValue = subTests[testName];
                         try{
-                            testValue(function() {
+                            testValue(() => {
                                 console.log('\x1b[32m%s\x1b[0m', tmpTestName);
+                                counter++;
                                 success++;
-                            })
+                                if (counter == limit) {
+                                    _app.produceTestReport(limit, success, error);
+                                }
+                            });
                         }
-                        catch (e) {
+                        catch(err){
                             error.push({
                                 'name' : testName,
-                                'error' : e
+                                'error' : err
                             });
                             console.log('\x1b[31m%s\x1b[0m', tmpTestName);
-                        }
-                        counter++;
-                        if (counter == limit) {
-                            _app.produceTestReport(limit, success, error);
+                            counter++;
+                            if (counter == limit) {
+                                _app.produceTestReport(limit, success, error);
+                            }
                         }
                     })();
                 }

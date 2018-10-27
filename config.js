@@ -1,6 +1,14 @@
 /*
-* Export Configurations variables
-*/
+ * This file is part of the mintunitish/Uptime Monitor.
+ *
+ * Copyright (c) 2018, Nitish Kumar <mintu.nitish@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ *
+ * Created By: Nitish Kumar on 10/27/2018 11:28 PM
+ */
 
 let environments ={};
 
